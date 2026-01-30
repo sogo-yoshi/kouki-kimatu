@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>タイマーと画像サイズ変更</title>
+
+  <style>
+    /* CSSで画像サイズをコントロール */
+    #myImage {
+      width: 200px;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>画像サイズが自動で変わります</h2>
+
+  <img id="myImage" src="sample.jpg" alt="サンプル画像">
+
+  <p id="status">待機中...</p>
+
+  <script>
+    // getElementById を使用
+    const image = document.getElementById('myImage');
+    const status = document.getElementById('status');
+
+    let size = 200;
+    let isLarge = false;
+
+    // タイマーを使用
+    setInterval(() => {
+      if (isLarge) {
+        size = 200;
+        status.textContent = '画像が小さくなりました';
+      } else {
+        size = 300;
+        status.textContent = '画像が大きくなりました';
+      }
+
+      image.style.width = size + 'px';
+      isLarge = !isLarge;
+    }, 2000); // 2秒ごとに実行
+  </script>
+
+</body>
+</html>
