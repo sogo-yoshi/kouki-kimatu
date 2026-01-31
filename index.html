@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像サイズとタイマー</title>
+    <title>タイマーで画像サイズを変更</title>
+
     <style>
-        /* 画像サイズを CSS で指定 */
+        /* CSSで画像サイズを制御 */
         #myImage {
             width: 300px;
             height: auto;
@@ -15,36 +15,38 @@
 </head>
 <body>
 
-<h1>画像のサイズを変えるタイマー</h1>
+<h1>画像サイズが自動で変わる</h1>
 
-<img id="myImage" src="irasuto.png" alt="イラスト画像">
+<!-- imageフォルダの irasuto.png を読み込む -->
+<img id="myImage" src="image/irasuto.png" alt="イラスト画像">
 
 <p id="statusText">現在の幅：300px</p>
 
 <script>
-    // getElementById で画像とテキストを取得
+    // getElementByIdで要素を取得
     const image = document.getElementById("myImage");
     const status = document.getElementById("statusText");
 
-    // 初期値
-    let currentSize = 300;
+    let size = 300;
     let growing = true;
 
-    // タイマーで 0.5秒ごとにサイズを変更
-    setInterval(function() {
+    // タイマー（0.5秒ごと）
+    setInterval(function () {
         if (growing) {
-            currentSize += 20;
-            if (currentSize >= 600) {
+            size += 20;
+            if (size >= 600) {
                 growing = false;
             }
         } else {
-            currentSize -= 20;
-            if (currentSize <= 200) {
+            size -= 20;
+            if (size <= 200) {
                 growing = true;
             }
         }
-        image.style.width = currentSize + "px";
-        status.textContent = "現在の幅：" + currentSize + "px";
+
+        // CSSのwidthを変更
+        image.style.width = size + "px";
+        status.textContent = "現在の幅：" + size + "px";
     }, 500);
 </script>
 
