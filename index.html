@@ -1,47 +1,168 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>タイマーと画像サイズ変更</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像サイズアニメーション</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-  <style>
-    /* CSSで画像サイズをコントロール */
-    #myImage {
-      width: 200px;
-      transition: width 0.5s;
-    }
-  </style>
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #animatedImage {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            min-height: 20px;
+        }
+
+        .size-small { width: 150px !important; height: 150px !important; }
+        .size-medium { width: 250px !important; height: 250px !important; }
+        .size-large { width: 350px !important; height: 350px !important; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>🖼️ 画像サイズコントローラー</h1>
+        
+        <!-- プレースホルダー画像（実際の画像URLに置き換え可能） -->
+        <img id="animatedImage" 
+             src="https://via.placeholder.com/200/667eea/ffffff?text=Sample+Image" 
+             alt="サンプル画像">
+        
+        <div class="controls">
+            <button onclick="startAutoResize()">自動リサイズ開始</button>
+            <button onclick="stopAutoResize()">停止</button>
+            <button onclick="resetSize()">リセット</button>
+        </div>
+        
+        <div id="status"></div>
+    </div>
 
-  <h2>画像サイズが自動で変わります</h2>
+    <script>
+        // グローバル変数
+        let timerInterval = null;
+        let currentSize = 0;
+        const sizes = ['size-small', 'size-medium', 'size-large'];
 
-  <img id="myImage" src="sample.jpg" alt="サンプル画像">
+        // getElementByIdを使用して要素を取得
+        const image = document.getElementById('animatedImage');
+        const statusDiv = document.getElementById('status');
 
-  <p id="status">待機中...</p>
+        // 自動リサイズを開始する関数
+        function startAutoResize() {
+            // すでにタイマーが動いている場合は停止
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
 
-  <script>
-    // getElementById を使用
-    const image = document.getElementById('myImage');
-    const status = document.getElementById('status');
+            updateStatus('自動リサイズ中...');
 
-    let size = 200;
-    let isLarge = false;
+            // タイマーを使用して1.5秒ごとにサイズを変更
+            timerInterval = setInterval(function() {
+                // 現在のクラスを削除
+                image.classList.remove(...sizes);
+                
+                // 次のサイズを適用
+                image.classList.add(sizes[currentSize]);
+                
+                // サイズインデックスを更新
+                currentSize = (currentSize + 1) % sizes.length;
+                
+                // ステータス更新
+                const sizeNames = ['小', '中', '大'];
+                updateStatus(`サイズ変更: ${sizeNames[(currentSize - 1 + sizes.length) % sizes.length]}`);
+            }, 1500);
+        }
 
-    // タイマーを使用
-    setInterval(() => {
-      if (isLarge) {
-        size = 200;
-        status.textContent = '画像が小さくなりました';
-      } else {
-        size = 300;
-        status.textContent = '画像が大きくなりました';
-      }
+        // 自動リサイズを停止する関数
+        function stopAutoResize() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                updateStatus('停止しました');
+            }
+        }
 
-      image.style.width = size + 'px';
-      isLarge = !isLarge;
-    }, 2000); // 2秒ごとに実行
-  </script>
+        // サイズをリセットする関数
+        function resetSize() {
+            stopAutoResize();
+            image.classList.remove(...sizes);
+            image.style.width = '200px';
+            image.style.height = '200px';
+            currentSize = 0;
+            updateStatus('リセットしました');
+        }
 
+        // ステータスを更新する関数
+        function updateStatus(message) {
+            // getElementByIdで取得した要素を更新
+            statusDiv.textContent = message;
+        }
+
+        // ページ読み込み時の初期化
+        window.onload = function() {
+            updateStatus('準備完了！ボタンをクリックしてください');
+        };
+
+        // ページを離れる前にタイマーをクリア
+        window.onbeforeunload = function() {
+            stopAutoResize();
+        };
+    </script>
 </body>
 </html>
