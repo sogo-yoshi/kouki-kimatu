@@ -5,7 +5,7 @@
 <title>画像切り替え</title>
 
 <style>
-  /* ① CSSで画像サイズをコントロール */
+  /* CSSで画像サイズをコントロール */
   #bananaPhoto {
     width: 200px;
     height: auto;
@@ -15,17 +15,13 @@
 
 <body>
 
-<h1>練習問題 画像切り替え</h1>
-
 <img src="image/banana.png" id="bananaPhoto" alt="バナナの画像">
 <br>
 <input type="button" value="画像切り替え" onclick="changeImg()">
 
 <script>
-/* ② getElementById を使用 */
-/* ③ タイマー（setTimeout）を使用 */
 function changeImg() {
-  document.getElementById("bananaPhoto").src = "image/banana_peel.png";
+  document.getElementById("bananaPhoto").src = "image/irasuto.png";
 
   setTimeout(function () {
     document.getElementById("bananaPhoto").src = "image/banana.png";
