@@ -17,8 +17,8 @@
 
 <h1>画像サイズが自動で変わる</h1>
 
-<!-- imageフォルダの irasuto.png を読み込む -->
-<img id="myImage" src="image/irasuto.png" alt="イラスト画像">
+<!-- GitHub上の実際のフォルダ名 imege を使用 -->
+<img id="myImage" src="imege/irasuto.png" alt="イラスト画像">
 
 <p id="statusText">現在の幅：300px</p>
 
@@ -44,7 +44,6 @@
             }
         }
 
-        // CSSのwidthを変更
         image.style.width = size + "px";
         status.textContent = "現在の幅：" + size + "px";
     }, 500);
