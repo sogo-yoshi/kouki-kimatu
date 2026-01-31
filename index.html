@@ -1,32 +1,51 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>画像切り替え</title>
-
-<style>
-  /* CSSで画像サイズをコントロール */
-  #bananaPhoto {
-    width: 200px;
-    height: auto;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像サイズとタイマー</title>
+    <style>
+        /* 画像サイズを CSS で指定 */
+        #myImage {
+            width: 300px;
+            height: auto;
+            transition: width 0.5s ease;
+        }
+    </style>
 </head>
-
 <body>
 
-<img src="image/banana.png" id="bananaPhoto" alt="バナナの画像">
-<br>
-<input type="button" value="画像切り替え" onclick="changeImg()">
+<h1>画像のサイズを変えるタイマー</h1>
+
+<img id="myImage" src="irasuto.png" alt="イラスト画像">
+
+<p id="statusText">現在の幅：300px</p>
 
 <script>
-function changeImg() {
-  document.getElementById("bananaPhoto").src = "image/irasuto.png";
+    // getElementById で画像とテキストを取得
+    const image = document.getElementById("myImage");
+    const status = document.getElementById("statusText");
 
-  setTimeout(function () {
-    document.getElementById("bananaPhoto").src = "image/banana.png";
-  }, 3000);
-}
+    // 初期値
+    let currentSize = 300;
+    let growing = true;
+
+    // タイマーで 0.5秒ごとにサイズを変更
+    setInterval(function() {
+        if (growing) {
+            currentSize += 20;
+            if (currentSize >= 600) {
+                growing = false;
+            }
+        } else {
+            currentSize -= 20;
+            if (currentSize <= 200) {
+                growing = true;
+            }
+        }
+        image.style.width = currentSize + "px";
+        status.textContent = "現在の幅：" + currentSize + "px";
+    }, 500);
 </script>
 
 </body>
